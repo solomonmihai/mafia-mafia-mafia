@@ -6,6 +6,7 @@ customElements.define("role-input", RoleInput);
 
 // TODO:
 // design
+// dont allow 2 of the same role
 // save role distribution to local storage
 // and reassign after refresh
 
@@ -41,10 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .flat()
       .sort(() => Math.random() - 0.5);
 
-    if (new Set(showOrder).size !== showOrder.length) {
-      rolesError.style.display = "block";
-      return;
-    }
+    // if (new Set(showOrder).size !== showOrder.length) {
+      // rolesError.style.display = "block";
+      // return;
+    // }
 
     document.getElementById("choose-stage").style.display = "none";
 
