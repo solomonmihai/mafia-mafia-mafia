@@ -8,13 +8,25 @@ customElements.define("role-input", RoleInput);
 // cant decrement less than 0
 // cant have 2 roles with the same name
 // design
+// save role distribution to local storage
 
 document.addEventListener("DOMContentLoaded", () => {
   const roleInputs = document.getElementById("role-inputs");
+  const rolesError = document.getElementById("roles-error");
+  const totalPlayerText = document.getElementById("total-player-count");
+  const roleText = document.getElementById("role-text");
+  const roleIndexText = document.getElementById("role-index-text");
+
+  function calcTotalPlayersCount() {
+    totalPlayerText.innerText = Array.from(roleInputs.children).reduce((acc, element) => acc + element.counterVal, 0);
+  }
 
   document.getElementById("add-role-btn").onclick = () => {
     const roleInput = new RoleInput();
     roleInputs.appendChild(roleInput);
+    roleInput.addEventListener("value-changed", calcTotalPlayersCount);
+
+    calcTotalPlayersCount();
   };
 
   document.getElementById("play-btn").onclick = () => {
@@ -28,11 +40,39 @@ document.addEventListener("DOMContentLoaded", () => {
       .flat()
       .sort(() => Math.random() - 0.5);
 
+    if (new Set(showOrder).size !== showOrder.length) {
+      rolesError.style.display = "block";
+      return;
+    }
+
     document.getElementById("choose-stage").style.display = "none";
 
     const showStage = document.getElementById("show-stage");
 
     showStage.style.display = "block";
-    showStage.innerHTML = showOrder.join("<br>");
+    // showStage.innerHTML = showOrder.join("<br>");
+
+    const showRoleBtn = document.getElementById("show-role-btn");
+
+    let currentRoleIndex = 0;
+    roleIndexText.innerText = currentRoleIndex + 1 + ". ";
+
+    showRoleBtn.onpointerdown = () => {
+      roleText.innerText = showOrder[currentRoleIndex];
+    };
+
+    showRoleBtn.onpointerup = () => {
+      roleText.innerText = "your role";
+    };
+
+    document.getElementById("next-role-btn").onclick = () => {
+      currentRoleIndex++;
+      roleIndexText.innerText = currentRoleIndex + 1 + ". ";
+
+      if (currentRoleIndex > showOrder.length - 1) {
+        showStage.style.display = "none";
+        document.getElementById("restart-stage").style.display = "block";
+      }
+    };
   };
 });

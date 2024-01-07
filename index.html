@@ -12,19 +12,29 @@
 
       <div id="choose-stage">
         <h3>choose roles and player count</h3>
-
-        <div id="role-inputs"></div>
+        <h3>total players: <span id="total-player-count">0</span></h3>
 
         <button id="add-role-btn">add role</button>
 
         <button id="play-btn">play</button>
 
+        <div id="role-inputs"></div>
+
+        <p id="roles-error">can't have 2 or more roles with the same name</p>
       </div>
 
       <div id="show-stage">
-
+        <p>
+          <span id="role-index-text"></span>
+          <span id="role-text">your role</span>
+        </p>
+        <button id="show-role-btn">show role</button>
+        <button id="next-role-btn">next</button>
       </div>
 
+      <div id="restart-stage">
+        <button id="restart-btn" onclick="window.location.reload()">restart</button>
+      </div>
     </div>
     <script type="module" src="/main.js"></script>
   </body>

@@ -1,6 +1,6 @@
 const htmlTemplate = `
   <div>
-    <input id="name-input" type="text" value="new role"/>
+    <input id="name-input" type="text"/>
     <button id="decrement-btn">-</button>
     <span id="counter-text">0</span>
     <button id="increment-btn">+</button>
@@ -23,10 +23,14 @@ export default class RoleInput extends HTMLElement {
     this.deleteBtn = this.shadowRoot.getElementById("delete-btn");
 
     this.counterVal = 1;
+    this.nameInput.value = "role " + (document.getElementById("role-inputs").children.length + 1);
 
     this.decrementBtn.onclick = () => this.counterVal--;
     this.incrementBtn.onclick = () => this.counterVal++;
-    this.deleteBtn.onclick = () => this.remove();
+    this.deleteBtn.onclick = () => {
+      this.remove();
+      this.dispatchValueChangedEvent();
+    };
   }
 
   get counterVal() {
@@ -37,10 +41,19 @@ export default class RoleInput extends HTMLElement {
     if (value < 0) return;
 
     this.setAttribute("counter-value", value);
+    this.dispatchValueChangedEvent();
   }
 
   get roleName() {
     return this.nameInput.value;
+  }
+
+  dispatchValueChangedEvent() {
+    this.dispatchEvent(
+      new CustomEvent("value-changed", {
+        composed: true,
+      })
+    );
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
