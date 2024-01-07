@@ -5,10 +5,9 @@ import RoleInput from "./role-input";
 customElements.define("role-input", RoleInput);
 
 // TODO:
-// cant decrement less than 0
-// cant have 2 roles with the same name
 // design
 // save role distribution to local storage
+// and reassign after refresh
 
 document.addEventListener("DOMContentLoaded", () => {
   const roleInputs = document.getElementById("role-inputs");
@@ -34,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
       name: item.roleName,
       count: item.counterVal,
     }));
+
+    if (roles.length == 0) return;
 
     const showOrder = roles
       .map(({ name, count }) => Array(count).fill(name))
