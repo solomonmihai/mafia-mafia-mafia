@@ -9,7 +9,7 @@ const htmlTemplate = `
 `;
 
 export default class RoleInput extends HTMLElement {
-  constructor() {
+  constructor(name, count) {
     super();
 
     this.attachShadow({ mode: "open" });
@@ -22,8 +22,8 @@ export default class RoleInput extends HTMLElement {
     this.incrementBtn = this.shadowRoot.getElementById("increment-btn");
     this.deleteBtn = this.shadowRoot.getElementById("delete-btn");
 
-    this.counterVal = 1;
-    this.nameInput.value = "role " + (document.getElementById("role-inputs").children.length + 1);
+    this.counterVal = count;
+    this.nameInput.value = name || "role xxxxxx";
 
     this.decrementBtn.onclick = () => this.counterVal--;
     this.incrementBtn.onclick = () => this.counterVal++;
@@ -38,7 +38,7 @@ export default class RoleInput extends HTMLElement {
   }
 
   set counterVal(value) {
-    if (value < 0) return;
+    if (value < 1) return;
 
     this.setAttribute("counter-value", value);
     this.dispatchValueChangedEvent();

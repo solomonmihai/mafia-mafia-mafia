@@ -1,11 +1,44 @@
-#app {
+:root {
+  --red: #ff474e;
+  --purple: #a5a0cf;
+  --white: #f6f0ed;
+  --black: #0c120c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  width: 100vw;
+  height: 100vh;
+
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
   font-weight: bold;
+  font-size: 1.1em;
+
+  background-color: var(--white);
+  color: var(--black);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#app {
+  padding: 10px;
+}
+
+#app,
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 #role-inputs {
@@ -23,4 +56,35 @@
 #roles-error {
   color: red;
   display: none;
+}
+
+button {
+  cursor: pointer;
+  padding: 10px;
+  font-size: 0.8em;
+  width: 100px;
+  font-weight: bold;
+  border-radius: 50px;
+  outline: none;
+  color: var(--black);
+  border: 3px solid var(--purple);
+  transition: 0.15s ease all;
+  user-select: none;
+}
+
+button:hover {
+  background-color: var(--purple);
+  color: var(--white);
+}
+
+.show-role-text {
+  color: #b0b0b0;
+}
+
+#role-index-text {
+  color: #b0b0b0;
+}
+
+#role-text {
+  font-size: 1.8rem;
 }

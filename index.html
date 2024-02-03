@@ -8,31 +8,36 @@
   </head>
   <body>
     <div id="app">
-      <h1>mafia mafia mafia</h1>
+      <h1 style="color: red;">mafia mafia mafia</h1>
 
-      <div id="choose-stage">
-        <h3>choose roles and player count</h3>
-        <h3>total players: <span id="total-player-count">0</span></h3>
+      <div id="choose-stage" class="stage">
+        <div>
+          <h3>choose roles and player count</h3>
+          <h3>total players: <span id="total-player-count">0</span></h3>
+        </div>
 
-        <button id="add-role-btn">add role</button>
-
-        <button id="play-btn">play</button>
+        <div>
+          <button id="add-role-btn">add role</button>
+          <button id="play-btn">play</button>
+        </div>
 
         <div id="role-inputs"></div>
 
-        <p id="roles-error">can't have 2 or more roles with the same name</p>
+        <p id="roles-error"></p>
       </div>
 
-      <div id="show-stage">
-        <p>
-          <span id="role-index-text"></span>
+      <div id="show-stage" class="stage">
+        <div>
+          <div class="show-role-text">tap aywhere to show role</div>
+          <div id="role-index-text"></div>
           <span id="role-text">your role</span>
-        </p>
-        <button id="show-role-btn">show role</button>
-        <button id="next-role-btn">next</button>
+        </div>
+        <div>
+          <button id="next-role-btn">next</button>
+        </div>
       </div>
 
-      <div id="restart-stage">
+      <div id="restart-stage" class="stage">
         <button id="restart-btn" onclick="window.location.reload()">restart</button>
       </div>
     </div>
