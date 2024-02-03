@@ -78,9 +78,11 @@ function createRole(name, count = 1) {
 document.addEventListener("DOMContentLoaded", () => {
   const localRoles = JSON.parse(localStorage.getItem("roles"));
 
-  localRoles.forEach(({ name, count }) => {
-    createRole(name, count);
-  });
+  if (localRoles) {
+    localRoles.forEach(({ name, count }) => {
+      createRole(name, count);
+    });
+  }
 
   elements.addRoleBtn.onclick = () => {
     const roleCount = elements.roleInputsDiv.children.length;
