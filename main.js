@@ -30,6 +30,8 @@ function shuffle(array) {
 }
 
 const elements = {
+  title: query("#title"),
+
   roleInputsDiv: query("#role-inputs"),
   rolesError: query("#roles-error"),
 
@@ -44,6 +46,7 @@ const elements = {
   chooseStage: query("#choose-stage"),
   showStage: query("#show-stage"),
   restartStage: query("#restart-stage"),
+  restartBtn: query("#restart-btn"),
 };
 
 function showError(msg) {
@@ -90,8 +93,7 @@ function createRole(name, count = 1) {
 }
 
 function setNextBtnVisible(value) {
-  elements.nextRoleBtn.style.opacity = value ? 1 : 0;
-  elements.nextRoleBtn.disabled = value ? false : true;
+  elements.nextRoleBtn.style.display = value ? "inline-block" : "none";
 }
 
 function createRoles(inputs) {
@@ -123,56 +125,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const localRoles = JSON.parse(localStorage.getItem("roles"));
 
   if (localRoles) {
-    localRoles.forEach(({ name, count }) => {
-      createRole(name, count);
-    });
+    localRoles.forEach(({ name, count }) => createRole(name, count));
+    calcTotalPlayersCount();
   }
 
-  elements.addRoleBtn.onclick = () => {
-    const roleCount = elements.roleInputsDiv.children.length;
-    createRole(`role ${roleCount + 1}`);
-    calcTotalPlayersCount();
+  elements.addRoleBtn.onclick = onAddRoleBtnClicked;
+  elements.playBtn.onclick = onPlayBtnClicked;
+  elements.restartBtn.onclick = onRestartBtnClicked;
+});
+
+function onAddRoleBtnClicked() {
+  const roleCount = elements.roleInputsDiv.children.length;
+  createRole(`role ${roleCount + 1}`);
+  calcTotalPlayersCount();
+}
+
+function onPlayBtnClicked() {
+  const roles = createRoles(elements.roleInputsDiv.children);
+  if (!roles) {
+    return;
+  }
+
+  const showOrder = createShowOrder(roles);
+
+  localStorage.setItem("roles", JSON.stringify(roles));
+
+  changeStage("chooseStage", "showStage");
+  setNextBtnVisible(false);
+  title.style.display = "none";
+
+  let currentRoleIndex = 0;
+
+  elements.roleIndexText.innerText = `${currentRoleIndex + 1}/${showOrder.length}`;
+
+  document.body.onpointerdown = () => {
+    elements.roleText.innerText = showOrder[currentRoleIndex];
   };
 
-  elements.playBtn.onclick = () => {
-    const roles = createRoles(elements.roleInputsDiv.children);
-    if (!roles) {
-      return;
-    }
+  document.body.onpointerup = () => {
+    elements.roleText.innerText = "your role";
+    setNextBtnVisible(true);
+  };
 
-    const showOrder = createShowOrder(roles);
-
-    localStorage.setItem("roles", JSON.stringify(roles));
-
-    changeStage("chooseStage", "showStage");
-    setNextBtnVisible(false);
-
-    let currentRoleIndex = 0;
-
+  elements.nextRoleBtn.onclick = () => {
+    currentRoleIndex++;
     elements.roleIndexText.innerText = `${currentRoleIndex + 1}/${showOrder.length}`;
 
-    document.body.onpointerdown = (evt) => {
-      if (evt.target.id == "next-role-btn") return;
-
-      elements.roleText.innerText = showOrder[currentRoleIndex];
-    };
-
-    document.body.onpointerup = () => {
-      elements.roleText.innerText = "your role";
-      setNextBtnVisible(true);
-    };
-
-    elements.nextRoleBtn.onclick = () => {
-      currentRoleIndex++;
-      elements.roleIndexText.innerText = `${currentRoleIndex + 1}/${showOrder.length}`;
-
-      if (currentRoleIndex > showOrder.length - 1) {
-        document.body.onpointerdown = null;
-        document.body.onpointerup = null;
-        changeStage("showStage", "restartStage");
-      } else {
-        setNextBtnVisible(false);
-      }
-    };
+    if (currentRoleIndex > showOrder.length - 1) {
+      document.body.onpointerdown = null;
+      document.body.onpointerup = null;
+      changeStage("showStage", "restartStage");
+    } else {
+      setNextBtnVisible(false);
+    }
   };
-});
+}
+
+function onRestartBtnClicked() {
+  window.location.reload();
+}
